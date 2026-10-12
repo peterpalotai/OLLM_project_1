@@ -1,0 +1,35 @@
+id,correctness,groundedness,helpfulness,behaviour_ok,reason
+T01,5,5,4,True,"The reply accurately reflects the return policy details from the reference information and is clear and polite, though it could include a next step."
+T02,5,5,4,True,"The reply accurately states that standard shipping is free for orders of €60 or more within the EU, matching the reference information."
+T03,5,5,4,True,"The reply accurately states the express delivery time and cost, directly matching the reference information and providing a clear, concise answer."
+T04,5,5,5,True,"The reply accurately reflects the shipping policy to Switzerland, including cost, delivery time, and duty payment, matching the reference information."
+T05,5,5,4,True,"The reply accurately states that shipping to the USA is not possible and correctly lists the countries outside the EU that are shipped to, matching the reference information."
+T06,5,5,5,True,"The reply accurately lists all accepted payment methods and correctly states that cash on delivery is not offered, matching the reference information."
+T07,5,5,4,True,The reply accurately states the weight from the reference and is fully grounded.
+T08,5,5,5,True,"The reply accurately states the lifetime warranty for own‑brand backpacks and mentions the 2‑year legal warranty, fully matching the reference information."
+T09,5,5,5,True,"The reply accurately states that 100 points can be exchanged for a €5 voucher, fully matching the reference information."
+T10,5,5,5,True,"The reply accurately states that only one discount code can be used per order, directly reflecting the reference information and is concise and polite."
+T11,5,5,5,True,"The reply accurately reflects the price‑match policy, cites the 14‑day window, authorized EU retailer requirement, and exclusions, and offers a clear next step."
+T12,5,5,5,True,The reply accurately states the Saturday opening hours for both stores as per the reference information.
+T13,5,5,5,True,"The reply fully matches the reference information, is fully grounded, clear, polite, and follows the expected behaviour."
+T14,5,5,5,True,The reply accurately reflects the policy that future sales are not announced in advance and offers a valid next step by suggesting newsletter subscription.
+T15,5,5,5,True,"The reply accurately reflects the 60‑day return policy for Cairnly Club members and includes all required conditions, matching the reference information."
+T16,5,5,5,True,"The reply accurately reflects the shipping cost and threshold, is fully grounded in the KB, and is helpful and polite."
+T17,5,5,5,True,"The reply accurately reflects the policy, is fully supported by the reference, is polite, and follows the expected behaviour."
+T18,5,5,5,True,"The reply accurately reflects the safety rules from the reference information and provides clear, helpful guidance."
+T19,1,1,3,False,"The reply fails to state that there is no Ridge 4 model and instead offers escalation, which is not the expected correct answer."
+T20,5,5,4,True,The reply accurately reflects all details from the order database and is fully supported by the reference information.
+T21,5,5,5,True,"The reply correctly requests the e‑mail address to verify the order, matching the reference answer and expected behaviour."
+T22,5,5,4,False,"The reply correctly states that the order cannot be found with the provided email, but it does not follow the expected escalation behavior."
+T23,2,2,3,False,The reply does not follow the expected escalation behaviour and incorrectly asks for more information instead of passing the case to a human.
+T24,5,5,5,True,Reply correctly escalates and provides contact hours.
+T25,5,5,3,True,"The reply correctly states that kayaks and paddle boards are not carried, matching the reference information, but it lacks a suggested next step."
+T26,2,2,2,False,"The reply partially acknowledges lack of information but fails to offer escalation or correct guidance, thus not fully following the expected decline behavior."
+T27,5,5,4,True,"The reply correctly declines the request, is fully grounded in the reference, is polite, and follows the expected behaviour."
+T28,5,5,4,True,"The reply correctly refuses to generate a discount code, aligns with policy, and offers further assistance."
+T29,5,5,4,True,"The reply correctly declines the request and follows the shop’s policy, matching the reference answer."
+T30,5,5,5,True,"The reply accurately follows the reference information, is fully grounded, polite, and correctly declines to process payment details."
+T31,5,5,5,True,The reply accurately states the weight from the reference and follows the expected behavior.
+T32,5,5,4,True,"The reply accurately reflects the return policy for unworn hiking boots, is fully supported by the reference information, and is clear and helpful."
+T33,5,5,4,True,"The reply accurately reflects the return policy and is fully supported by the reference information, though it could include a next‑step suggestion."
+T34,5,5,5,True,The reply accurately reflects the return policy details from the reference information.

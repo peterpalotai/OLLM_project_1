@@ -1,0 +1,4 @@
+id,group,diagnosis
+T21,tool_use,generation or keyword check: missing fact
+T22,tool_use,generation: wrong behaviour (escalation/refusal)
+T25,out_of_scope,generation: wrong behaviour (escalation/refusal)
