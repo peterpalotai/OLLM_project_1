@@ -14,8 +14,8 @@ from sentence_transformers import SentenceTransformer
 
 # ============================== CONFIGURATION ==============================
 CHAT_MODEL = "openai/gpt-oss-120b"   # answers the customers
-TEMPERATURE = 0.2                     # low temperature = more stable answers
-MAX_COMPLETION_TOKENS = 1000
+TEMPERATURE = 0.4                     # low temperature = more stable answers
+MAX_COMPLETION_TOKENS = 2500
 
 TOP_K = 3                 # help-centre documents given to the model per question
 EMBED_MODEL = "intfloat/multilingual-e5-small"   # multilingual sentence embeddings (MIT licence)
@@ -102,16 +102,13 @@ KB = [{"id": i, "category": c, "title": t, "text": x}
 KB_BY_ID = {d["id"]: d for d in KB}
 
 
-def get_order_status(order_id, verified_email):
-    '''Look up ONE order. Parameterised SQL only; the e-mail check is done by the application.'''
-    if not verified_email:
-        return {"error": "verification_required",
-                "message": "Ask the customer for the e-mail address used for this order."}
+def get_order_status(order_id):
+    '''Look up ONE order by its number. Parameterised SQL only.'''
     cursor.execute('''SELECT order_id, status, carrier, tracking_code, last_update, estimated_delivery, items
-                      FROM orders WHERE order_id = ? AND lower(email) = lower(?)''', (order_id, verified_email))
+                      FROM orders WHERE order_id = ?''', (order_id,))
     row = cursor.fetchone()
-    if row is None:   # same message for 'not found' and 'wrong e-mail', so nobody can probe other orders
-        return {"error": "not_found_or_not_verified", "message": "No order matches this number and e-mail address."}
+    if row is None:
+        return {"error": "not_found", "message": "No order matches this number."}
     fields = ["order_id", "status", "carrier", "tracking_code", "last_update", "estimated_delivery", "items"]
     return {f: v for f, v in zip(fields, row) if v is not None}
 
@@ -133,11 +130,11 @@ TOOLS = [{
 }]
 
 
-def execute_tool_call(tool_call, session_email):
+def execute_tool_call(tool_call):
     '''The application, not the model, runs the requested tool.'''
     if tool_call["name"] == "get_order_status":
         arguments = json.loads(tool_call["arguments"])
-        return get_order_status(arguments["order_id"], session_email)
+        return get_order_status(arguments["order_id"])
     return {"error": "unknown_tool"}
 
 
@@ -177,11 +174,6 @@ def redact_pii(text):
     for pattern, replacement in rules:
         text = re.sub(pattern, replacement, text)
     return text
-
-
-def extract_email(text):
-    m = re.search(EMAIL_PATTERN, text)
-    return m.group(0) if m else None
 
 
 def strip_our_tags(text):
@@ -260,7 +252,7 @@ Classify the customer message, set its urgency and write a short, helpful reply.
 
 KNOWLEDGE RULES:
 - Use ONLY facts from <documents> and from tool results. If they do not contain the answer, say that you do not have that information. Never invent policies, prices, dates, products or order details.
-- When the customer mentions an order number, look it up with the get_order_status tool; never guess an order status. If the tool says verification is required, ask for the e-mail address used for the order. If the order cannot be found or verified, say so.
+- When the customer mentions an order number, look it up with the get_order_status tool; never guess an order status. The order number is enough: do not ask for an e-mail address. If the order cannot be found, say so.
 - You cannot issue refunds, create discount codes, process payments or change orders. For such requests politely explain that you cannot do this.
 - If the customer is upset, apologise briefly.
 
@@ -283,7 +275,8 @@ URGENCY:
 - "low": general information questions
 
 STYLE:
-Friendly and concise: at most 4 sentences, in the customer's language.
+Friendly and concise: at most 4 sentences.
+LANGUAGE: always reply in the language of the customer's LATEST message, even if earlier messages were in another language. If the latest message has no clear language (for example only an order number), keep the language of the conversation.
 
 OUTPUT:
 Return ONLY valid JSON, with no text before or after it:
@@ -322,12 +315,10 @@ class ChatSession:
         self.guardrails = guardrails
         self.history = []            # earlier messages sent to the LLM (trimmed to MAX_HISTORY_TURNS)
         self.past_questions = []     # redacted user messages, for follow-up retrieval
-        self.email = None            # kept by the application for order verification; never sent to the LLM
 
     def ask(self, message):
         r = {"question": message, "blocked": None, "retrieved": [], "tool_log": [],
              "prompt_tokens": 0, "completion_tokens": 0, "latency_s": 0.0}
-        self.email = extract_email(message) or self.email
         safe = redact_pii(message) if self.guardrails else message
 
         if self.guardrails and detect_injection(message):
@@ -353,7 +344,7 @@ class ChatSession:
                                              "function": {"name": tc["name"], "arguments": tc["arguments"]}}
                                             for tc in rec["tool_calls"]]})
             for tc in rec["tool_calls"]:
-                result = execute_tool_call(tc, self.email)          # the application executes, not the model
+                result = execute_tool_call(tc)          # the application executes, not the model
                 r["tool_log"].append({"name": tc["name"], "arguments": tc["arguments"], "result": result})
                 messages.append({"role": "tool", "tool_call_id": tc["id"], "name": tc["name"],
                                  "content": json.dumps(result)})
