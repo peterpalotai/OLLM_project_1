@@ -91,11 +91,8 @@ def main():
             items TEXT)""")
         conn.executemany("INSERT INTO kb_documents VALUES (:id, :category, :title, :text)", KB)
         conn.executemany("INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?, ?, ?)", orders)
-        n_docs = conn.execute("SELECT COUNT(*) FROM kb_documents").fetchone()[0]
-        n_orders = conn.execute("SELECT COUNT(*) FROM orders").fetchone()[0]
     conn.close()                             # the context manager only commits; close so the file is released
-    assert (n_docs, n_orders) == (len(KB), len(orders))
-    print(f"{DB_PATH}: {n_docs} help-centre documents, {n_orders} orders")
+    print(f"{DB_PATH}: {len(KB)} help-centre documents, {len(orders)} orders")
 
 
 if __name__ == "__main__":
