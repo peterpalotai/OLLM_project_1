@@ -94,7 +94,8 @@ def extract_json(text):
 
 
 # ============================== KNOWLEDGE SOURCES ==============================
-conn = sqlite3.connect(f"{DB_PATH.resolve().as_uri()}?mode=ro", uri=True)   # read-only: writes raise an error
+# read-only: writes raise an error; check_same_thread=False because the Streamlit web chat runs every rerun in a new thread
+conn = sqlite3.connect(f"{DB_PATH.resolve().as_uri()}?mode=ro", uri=True, check_same_thread=False)
 cursor = conn.cursor()
 
 KB = [{"id": i, "category": c, "title": t, "text": x}
