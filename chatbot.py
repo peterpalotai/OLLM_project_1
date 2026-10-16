@@ -44,8 +44,11 @@ def chat_completion(messages, model=CHAT_MODEL, tools=None, max_tokens=MAX_COMPL
     try:
         response = client.chat.completions.create(**params)
     except groq.APIError as e:
-        print(f"    Groq error: {e}")
-        return {"content": "", "tool_calls": [], "prompt_tokens": 0, "completion_tokens": 0, "latency_s": 0.0}
+        content = reply_from_failed_tool_call(e)
+        if content is None:
+            print(f"    Groq error: {e}")
+        return {"content": content or "", "tool_calls": [], "prompt_tokens": 0, "completion_tokens": 0,
+                "latency_s": round(time.time() - start, 2)}
     message = response.choices[0].message
     return {
         "content": message.content or "",
@@ -55,6 +58,19 @@ def chat_completion(messages, model=CHAT_MODEL, tools=None, max_tokens=MAX_COMPL
         "completion_tokens": response.usage.completion_tokens,
         "latency_s": round(time.time() - start, 2),
     }
+
+
+def reply_from_failed_tool_call(error):
+    '''gpt-oss sometimes sends its final JSON reply as a call to a tool that does not exist (e.g. "json").
+    Groq rejects that call ("tool_use_failed"), but the error still contains the generated reply: return it as text.'''
+    try:
+        call = json.loads(error.body["error"]["failed_generation"])
+        if call["name"] != "get_order_status":
+            print(f"    note: the model sent its reply as a call to tool {call['name']!r}; using that reply")
+            return json.dumps(call["arguments"], ensure_ascii=False)
+    except (TypeError, KeyError, json.JSONDecodeError):
+        pass
+    return None
 
 
 def ask_llm(prompt, model=CHAT_MODEL, max_tokens=MAX_COMPLETION_TOKENS):

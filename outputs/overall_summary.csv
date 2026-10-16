@@ -1,12 +1,11 @@
-,Final chatbot,Zero-shot,Plain LLM
-pass rate (all cases),0.9117647058823529,0.9411764705882353,0.47058823529411764
-pass rate (answerable cases),0.96,0.92,0.4
-escalate/decline behaviour correct,0.7777777777777778,1.0,0.7777777777777778
-category exact match,0.9705882352941176,0.9117647058823529,0.9705882352941176
-urgency exact match,0.8823529411764706,0.8823529411764706,0.8529411764705882
-hand-off exact match,0.9,0.9333333333333333,0.8333333333333334
-"valid JSON (all fields, allowed values)",1.0,1.0,1.0
-tool decisions correct,1.0,1.0,0.9090909090909091
-citations valid (no invented IDs),1.0,1.0,
-mean BLEU vs reference,0.3016817512247889,0.2440652094917838,0.06644851500972562
-mean ROUGE-L vs reference,0.576980169248293,0.5198798030024587,0.30127399712361486
+,Final chatbot
+pass rate,0.912
+category exact match,0.941
+urgency exact match,0.853
+valid JSON,0.971
+tool decisions correct,1.0
+mean BLEU vs reference,0.321
+mean ROUGE-L vs reference,0.596
+mean prompt tokens per answer,1518.882
+mean completion tokens per answer,102.529
+mean latency per answer (s),7.025
