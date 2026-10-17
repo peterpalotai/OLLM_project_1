@@ -14,7 +14,7 @@ from sentence_transformers import SentenceTransformer
 
 # ============================== CONFIGURATION ==============================
 CHAT_MODEL = "openai/gpt-oss-120b"   # answers the customers
-TEMPERATURE = 0.4                     # low temperature = more stable answers
+TEMPERATURE = 0.2                     # low temperature = more stable answers
 MAX_COMPLETION_TOKENS = 2500
 
 TOP_K = 3                 # help-centre documents given to the model per question
