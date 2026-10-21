@@ -29,9 +29,9 @@ client = None
 
 
 def connect(api_key):
-    '''Create the Groq client that chat_completion() uses.'''
+    '''Create the Groq client that chat_completion() uses. max_retries=0: the SDK does not retry failed calls either.'''
     global client
-    client = Groq(api_key=api_key)
+    client = Groq(api_key=api_key, max_retries=0)
 
 
 def chat_completion(messages, model=CHAT_MODEL, tools=None, max_tokens=MAX_COMPLETION_TOKENS):
@@ -166,19 +166,22 @@ BLOCKED_REPLY = ("I'm sorry, but I can't help with that request. I can only help
                  "Cairnly products, orders and policies.")
 EMAIL_PATTERN = r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+"
 CARD_PATTERN = r"\b\d(?:[ -]?\d){12,18}\b"          # 13-19 digits, optionally separated by spaces or dashes
+PHONE_PATTERN = r"(?<![\w#])\+?\d[\d ()/-]{7,}\d\b"
+DATE_PATTERN = r"\d{4}-\d{1,2}-\d{1,2}|\d{1,2}[/-]\d{1,2}[/-]\d{2,4}"   # 2026-10-12, 12/10/2026: dates, not phone numbers
 
 
 def redact_pii(text):
-    rules = [(CARD_PATTERN, "[CARD NUMBER REDACTED]"),
-             (EMAIL_PATTERN, "[EMAIL REDACTED]"),
-             (r"(?<![\w#])\+?\d[\d ()/-]{7,}\d\b", "[PHONE REDACTED]")]
-    for pattern, replacement in rules:
-        text = re.sub(pattern, replacement, text)
-    return text
+    text = re.sub(CARD_PATTERN, "[CARD NUMBER REDACTED]", text)
+    text = re.sub(EMAIL_PATTERN, "[EMAIL REDACTED]", text)
+    return re.sub(PHONE_PATTERN, lambda m: m.group(0) if re.fullmatch(DATE_PATTERN, m.group(0)) else "[PHONE REDACTED]", text)
 
 
 def strip_our_tags(text):
-    return re.sub(r"</?\s*(customer_message|documents)\s*>", "", text, flags=re.I)
+    '''Remove our own tag names until none is left, so nested tricks like </cust</customer_message>omer_message> fail.'''
+    previous = None
+    while text != previous:
+        previous, text = text, re.sub(r"</?\s*(customer_message|documents)\s*>", "", text, flags=re.I)
+    return text
 
 
 INJECTION_PHRASES = ["ignore all previous instructions", "ignore previous instructions", "ignore your instructions",
@@ -325,8 +328,7 @@ class ChatSession:
         if self.guardrails and detect_injection(message):
             r.update(category="Out of scope", urgency="low", answer=BLOCKED_REPLY, sources=[],
                      json_valid=True, blocked="input_injection")
-            self._remember(safe, r)
-            return r
+            return r                 # not remembered: a blocked message never reaches the LLM, not even with a later turn
 
         r["retrieved"] = [i for i, _ in retriever.search(retrieval_query(safe, self.past_questions))]
 
