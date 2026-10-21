@@ -29,9 +29,10 @@ client = None
 
 
 def connect(api_key):
-    '''Create the Groq client that chat_completion() uses. max_retries=0: the SDK does not retry failed calls either.'''
+    '''Create the Groq client that chat_completion() uses. On a rate limit (HTTP 429), a timeout or a server error the SDK
+    waits as long as Groq asks (retry-after) and tries again, up to 5 times: needed on the free tier.'''
     global client
-    client = Groq(api_key=api_key, max_retries=0)
+    client = Groq(api_key=api_key, max_retries=5)
 
 
 def chat_completion(messages, model=CHAT_MODEL, tools=None, max_tokens=MAX_COMPLETION_TOKENS):
