@@ -1,11 +1,11 @@
 ,Final chatbot
-pass rate,0.206
-category exact match,0.206
-urgency exact match,0.206
-valid JSON,0.206
-tool decisions correct,0.882
-mean BLEU vs reference,0.066
-mean ROUGE-L vs reference,0.106
-mean prompt tokens per answer,221.824
-mean completion tokens per answer,14.412
-mean latency per answer (s),0.111
+pass rate,0.971
+category exact match,0.971
+urgency exact match,0.882
+valid JSON,1.0
+tool decisions correct,1.0
+mean BLEU vs reference,0.29
+mean ROUGE-L vs reference,0.587
+mean prompt tokens per answer,1603.706
+mean completion tokens per answer,105.029
+mean latency per answer (s),4.577

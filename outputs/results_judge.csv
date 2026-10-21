@@ -1,35 +1,35 @@
 id,correctness,groundedness,helpfulness,behaviour_ok,reason
-T01,5.0,5.0,5.0,True,The reply accurately reflects the return policy details from the reference information.
-T02,5.0,5.0,5.0,True,The reply accurately reflects the shipping policy from the reference information.
-T03,5.0,5.0,3.0,True,"The reply accurately states the express delivery time and cost, fully supported by the reference, but does not offer additional helpful information or next steps."
-T04,5.0,5.0,5.0,True,"The reply accurately reflects the shipping policy for Switzerland, providing all required details without adding unsupported information."
-T05,5.0,5.0,4.0,True,"The reply accurately states the shipping restrictions and is polite, though it could offer a next step."
-T06,0.0,0.0,0.0,False,No chatbot reply was provided to evaluate.
-T07,0.0,0.0,0.0,False,No chatbot reply was provided to evaluate.
-T08,0.0,0.0,0.0,False,No chatbot reply was provided to evaluate.
-T09,0.0,0.0,0.0,False,"No reply was provided, so it cannot contain correct, grounded, or helpful information."
-T10,0.0,0.0,0.0,False,No reply was provided to evaluate.
-T11,1.0,1.0,1.0,False,"The chatbot provided no reply, so it fails to give correct, grounded, helpful information and does not follow expected behaviour."
-T12,5.0,5.0,5.0,True,"The reply accurately states the Saturday opening hours for both stores, directly matches the reference information, and is concise and helpful."
-T13,5.0,5.0,5.0,True,Reply gives correct information and a clear next step.
-T14,0.0,0.0,0.0,False,No chatbot reply was provided to evaluate.
-T15,0.0,0.0,0.0,False,No chatbot reply was provided to evaluate.
-T16,,,,,
-T17,,,,,
-T18,,,,,
-T19,,,,,
-T20,0.0,0.0,0.0,False,No chatbot reply was provided to evaluate.
-T21,,,,,
-T22,,,,,
-T23,,,,,
-T24,,,,,
-T25,,,,,
-T26,,,,,
-T27,,,,,
-T28,,,,,
-T29,,,,,
-T30,,,,,
-T31,,,,,
-T32,,,,,
-T33,,,,,
-T34,,,,,
+T01,5,5,5,True,The reply accurately reflects the return policy details from the reference information.
+T02,5,5,5,True,The reply accurately reflects the shipping policy from the reference information and is clear and helpful.
+T03,5,5,5,True,The reply accurately states the express delivery time and cost as per the reference information.
+T04,5,5,5,True,"The reply accurately reflects the shipping policy to Switzerland, including cost, delivery time, and duties."
+T05,5,5,5,True,"The reply accurately states that shipping to the USA is not available and correctly lists the permitted countries, matching the reference information and following the expected polite refusal."
+T06,5,5,5,True,"The reply accurately lists all accepted payment methods and correctly states that cash on delivery is not offered, matching the reference information."
+T07,5,5,5,True,The reply correctly states the weight from the KB and is concise and helpful.
+T08,5,5,5,True,"The reply accurately states the lifetime warranty for own‑brand backpacks plus the 2‑year legal warranty, fully aligned with the reference information."
+T09,5,5,4,True,"The reply correctly states that 100 points are needed for a €5 voucher, fully supported by the reference information, and it is clear and polite."
+T10,5,5,4,True,"The reply accurately states that only one discount code can be used per order, aligning with the reference information, though it could offer a next step for more help."
+T11,5,5,5,True,"The reply accurately reflects the price‑match policy, cites the relevant conditions, and offers a clear next step."
+T12,5,5,4,True,The reply accurately states the Saturday opening hours for both stores as per the reference information.
+T13,5,5,5,True,"The reply accurately follows the policy: it instructs to report within 7 days via Help form or email with order number and photos, and offers a free replacement or refund."
+T14,5,5,5,True,"The reply accurately states that future Black Friday discounts are not disclosed in advance, aligning with the reference information and is polite and helpful."
+T15,5,5,5,True,"Reply correctly states the 60‑day return period for Cairnly Club members and the required conditions, fully aligning with the reference information."
+T16,5,5,5,True,"The reply accurately states the €4.95 standard shipping cost and the €60 threshold for free shipping, matching the reference information."
+T17,5,5,4,True,"The reply correctly states that opened gas canisters cannot be returned, directly reflecting the reference information."
+T18,5,5,5,True,"The reply accurately reflects the reference information, is fully supported, helpful, and follows expected behaviour."
+T19,5,5,5,True,"The reply correctly declines to provide a price for a non-existent Ridge 4, matching the expected behavior."
+T20,5,5,4,True,"The reply accurately reflects all details from the order database and provides clear, helpful information."
+T21,5,5,4,True,"The reply correctly states the delivery date, carrier, and tracking code, all supported by the reference data, and is clear and polite, though it omits the item detail."
+T22,5,5,4,True,"The reply accurately reflects the order status and delivery estimate from the reference data, is fully grounded, and is clear and polite, though it could include a next step."
+T23,5,5,5,True,"The reply accurately states that no order was found and politely asks the customer to verify the order number, matching the reference answer and KB guidance."
+T24,5,5,5,True,"The reply accurately follows the KB-19 guidelines, providing correct contact options and next steps."
+T25,5,5,3,True,"The reply correctly states lack of information about kayaks or paddle boards, is grounded, polite, but could provide a next step."
+T26,5,5,3,True,"The reply correctly declines to provide tent rental information, aligning with the expected behaviour."
+T27,5,5,3,True,The reply correctly declines the request in line with the reference answer.
+T28,5,5,4,True,The reply correctly refuses to provide a discount code and follows the policy guidelines.
+T29,5,5,5,True,The reply matches the expected decline and is fully aligned with the reference information.
+T30,5,5,5,True,"The reply accurately follows the reference information, is fully grounded, polite, and provides a correct next step."
+T31,5,5,4,True,"The reply correctly states the weight from the KB, is fully grounded, clear, and polite, though it could offer a next step."
+T32,5,5,5,True,"The reply accurately reflects the return policy for unworn hiking boots, is fully supported by the reference information, and is helpful and polite."
+T33,5,5,5,True,"The reply accurately reflects the return policy, cites the correct conditions, and offers a clear next step."
+T34,4,5,4,True,"The reply correctly states the 30‑day return window and conditions, but omits the 60‑day extension for Cairnly Club members."

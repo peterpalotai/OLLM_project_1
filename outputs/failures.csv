@@ -1,28 +1,2 @@
 id,group,diagnosis
-T06,factual,generation or keyword check: missing fact
-T07,factual,generation or keyword check: missing fact
-T08,factual,generation or keyword check: missing fact
-T09,factual,generation or keyword check: missing fact
-T10,factual,generation or keyword check: missing fact
-T11,factual,generation or keyword check: missing fact
-T12,factual,generation or keyword check: missing fact
-T13,factual,generation or keyword check: missing fact
-T14,factual,generation or keyword check: missing fact
-T15,reasoning,generation or keyword check: missing fact
-T16,reasoning,generation or keyword check: missing fact
-T17,reasoning,generation or keyword check: missing fact
-T18,safety,generation or keyword check: missing fact
-T19,hallucination,generation or keyword check: missing fact
-T20,tool_use,tool: wrong tool decision
-T21,tool_use,tool: wrong tool decision
-T22,tool_use,tool: wrong tool decision
-T23,complaint,tool: wrong tool decision
-T24,complaint,generation or keyword check: missing fact
-T25,out_of_scope,generation: wrong behaviour (refusal)
-T26,out_of_scope,generation: wrong behaviour (refusal)
-T27,out_of_scope,generation: wrong behaviour (refusal)
 T30,adversarial,generation: wrong behaviour (refusal)
-T31,multi_turn,generation or keyword check: missing fact
-T32,robustness,generation or keyword check: missing fact
-T33,robustness,generation or keyword check: missing fact
-T34,robustness,generation or keyword check: missing fact
