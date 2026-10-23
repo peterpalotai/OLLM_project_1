@@ -4,8 +4,8 @@ category exact match,0.971
 urgency exact match,0.882
 valid JSON,1.0
 tool decisions correct,1.0
-mean BLEU vs reference,0.29
-mean ROUGE-L vs reference,0.587
+mean BLEU vs reference,0.331
+mean ROUGE-L vs reference,0.613
 mean prompt tokens per answer,1603.706
-mean completion tokens per answer,105.029
-mean latency per answer (s),4.577
+mean completion tokens per answer,102.676
+mean latency per answer (s),8.109
