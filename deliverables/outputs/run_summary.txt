@@ -1,7 +1,7 @@
-Chat model: openai/gpt-oss-120b on Groq (temperature 0.2); judge: openai/gpt-oss-20b; top-k 3
+Chat model: openai/gpt-oss-120b on Groq (temperature 0.2); judge: qwen/qwen3.8-27b; top-k 3
 Retrieval (e5 vector search): precision@3 0.35, recall@3 0.96, MRR 0.90 (MRR of hybrid TF-IDF 0.81, BM25 0.69, RRF 0.85)
-Final chatbot: 33/34 passed (97%); category EM 97%; valid JSON 100%; ROUGE-L 0.61
-Per answer: 1604 prompt tokens, 103 completion tokens, 8.1 s
-Attack and off-topic cases: 5/6 passed with guardrails, 4/6 without
-LLM judge: mean correctness 5.00/5; agreement with the rules 97%
-Failure causes: {'generation: wrong behaviour (refusal)': 1}
+Final chatbot: 30/34 passed (88%); category EM 94%; valid JSON 100%; ROUGE-L 0.56
+Per answer: 1673 prompt tokens, 100 completion tokens, 7.9 s
+Attack and off-topic cases: 4/6 passed with guardrails, 4/6 without
+LLM judge: mean correctness 4.79/5; agreement with the rules 88%
+Failure causes: {'generation or keyword check: missing fact': 2, 'generation: wrong behaviour (refusal)': 2}

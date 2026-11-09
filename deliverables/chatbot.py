@@ -36,8 +36,9 @@ def connect(api_key):
 
 def chat_completion(messages, model=CHAT_MODEL, tools=None, max_tokens=MAX_COMPLETION_TOKENS):
     '''One Groq chat call. Returns a dict with content, tool_calls, token usage and latency.'''
-    params = dict(model=model, messages=messages, temperature=TEMPERATURE, max_completion_tokens=max_tokens,
-                  reasoning_effort="low", include_reasoning=False)
+    params = dict(model=model, messages=messages, temperature=TEMPERATURE, max_completion_tokens=max_tokens)
+    if model.startswith("openai/gpt-oss"):   # only the gpt-oss models accept these two parameters (the Qwen judge does not)
+        params.update(reasoning_effort="low", include_reasoning=False)
     if tools:
         params.update(tools=tools, tool_choice="auto")
     start = time.time()
@@ -103,13 +104,14 @@ KB = [{"id": i, "category": c, "title": t, "text": x}
 KB_BY_ID = {d["id"]: d for d in KB}
 
 
-def get_order_status(order_id):
-    '''Look up ONE order by its number. Parameterised SQL only.'''
+def get_order_status(order_id, email):
+    '''Look up ONE order by its number AND the e-mail address of the order. Parameterised SQL only.
+    A wrong number and a wrong e-mail give the same error.'''
     cursor.execute('''SELECT order_id, status, carrier, tracking_code, last_update, estimated_delivery, items
-                      FROM orders WHERE order_id = ?''', (order_id,))
+                      FROM orders WHERE order_id = ? AND lower(email) = lower(?)''', (order_id, email))
     row = cursor.fetchone()
     if row is None:
-        return {"error": "not_found", "message": "No order matches this number."}
+        return {"error": "not_found", "message": "No order matches this order number and e-mail address."}
     fields = ["order_id", "status", "carrier", "tracking_code", "last_update", "estimated_delivery", "items"]
     return {f: v for f, v in zip(fields, row) if v is not None}
 
@@ -120,6 +122,7 @@ TOOLS = [{
     "function": {
         "name": "get_order_status",
         "description": "Look up the status of ONE customer order by its order number (one letter + 4 digits, e.g. A1234). "
+                       "The application checks it together with the e-mail address written in the same customer message. "
                        "Use it only when the customer asks about a specific order.",
         "parameters": {
             "type": "object",
@@ -131,11 +134,15 @@ TOOLS = [{
 }]
 
 
-def execute_tool_call(tool_call):
+def execute_tool_call(tool_call, message):
     '''The application, not the model, runs the requested tool.'''
     if tool_call["name"] == "get_order_status":
-        arguments = json.loads(tool_call["arguments"])
-        return get_order_status(arguments["order_id"])
+        order_id = json.loads(tool_call["arguments"])["order_id"]
+        email = re.search(EMAIL_PATTERN, message)   # the e-mail comes only from the current message; the model never sees it
+        if email is None or order_id.upper() not in message.upper():
+            return {"error": "verification_required",
+                    "message": "Ask the customer to send the order number and the e-mail address used for the order together in one message."}
+        return get_order_status(order_id, email.group(0))
     return {"error": "unknown_tool"}
 
 
@@ -253,7 +260,7 @@ Classify the customer message, set its urgency and write a short, helpful reply.
 
 KNOWLEDGE RULES:
 - Use ONLY facts from <documents> and from tool results. If they do not contain the answer, say that you do not have that information. Never invent policies, prices, dates, products or order details.
-- When the customer mentions an order number, look it up with the get_order_status tool; never guess an order status. The order number is enough: do not ask for an e-mail address. If the order cannot be found, say so.
+- When the customer asks about a specific order, look it up with the get_order_status tool; never guess an order status. The order number and the e-mail address used for the order must be in the same message. If the latest message has an order number but no e-mail address, or an e-mail address but no order number, do not call the tool: ask the customer to send the order number and the e-mail address together in one message. If the tool says verification is required, ask the customer to send the order number and the e-mail address together in one message. If no order matches, say only that no order matches this order number and e-mail address; never say which of the two is wrong.
 - You cannot issue refunds, create discount codes, process payments or change orders. For such requests politely explain that you cannot do this.
 - If the customer is upset, apologise briefly.
 
@@ -345,7 +352,7 @@ class ChatSession:
                                              "function": {"name": tc["name"], "arguments": tc["arguments"]}}
                                             for tc in rec["tool_calls"]]})
             for tc in rec["tool_calls"]:
-                result = execute_tool_call(tc)          # the application executes, not the model
+                result = execute_tool_call(tc, message)          # the application executes, not the model
                 r["tool_log"].append({"name": tc["name"], "arguments": tc["arguments"], "result": result})
                 messages.append({"role": "tool", "tool_call_id": tc["id"], "name": tc["name"],
                                  "content": json.dumps(result)})
